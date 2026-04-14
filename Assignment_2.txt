@@ -1,0 +1,76 @@
+%%%%%% PROBLEM 1 %%%%%%
+f2(N, [F, G]) :- f2_helper(N, 0, 1, F, G).
+
+f2_helper(0, Acc1, Acc2, Acc1, Acc2).
+f2_helper(N, Acc1, Acc2, F, G) :-
+    N > 0,
+    Nprev is N - 1,
+    NewAcc is Acc1 + Acc2,
+    f2_helper(Nprev, Acc2, NewAcc, F, G).
+
+fi --> [0, 1], fi_helper(0, 1).
+
+fi_helper(P2, P1) --> [].
+fi_helper(P2, P1) -->
+    {Next is P1 + P2},
+    [Next],
+    fi_helper(P1, Next).
+
+%%%%%% PROBLEM 2 %%%%%%
+even(L) --> [].
+even(L) -->
+    [A], {member(A, L)},
+    [B], {member(B, L)},
+    even(L).
+
+%%%%%% PROBLEM 3 %%%%%%
+s --> s_helper([]).
+
+s_helper(Acc) --> [0], match(Acc).
+s_helper(Acc) --> 
+    [X], {member(X, [1,2,3])}, 
+    s_helper([X|Acc]).
+
+match([]) --> [].
+match([H|T]) --> [H], match(T).
+
+%%%%%% PROBLEM 4 %%%%%%
+%%%% A %%%%
+accept(L) :- steps(q0,L,F), final(F).
+steps(Q,[],Q).
+steps(Q,[H|T],Q2) :- tran(Q,H,Qn), steps(Qn,T,Q2).
+
+tran(q0, 0, q0).
+tran(q0, 1, q0).
+tran(q0, 1, q1).
+
+tran(q1, 0, q2).
+tran(q1, 1, q2).
+
+tran(q2, 0, q3).
+tran(q2, 1, q3).
+
+final(q3).
+
+%%%% B %%%%
+bit --> [B], { member(B, [0, 1]) }.
+
+q0 --> bit, q0.
+q0 --> [1], q1.
+
+q1 --> bit, q2.
+q2 --> bit, q3.
+
+q3 --> [].
+
+%%%% C %%%%
+numeral(0).
+numeral(succ(X)) :- numeral(X).
+
+length_helper([], 0).
+length_helper([_|T], succ(N)) :- length_helper(T, N).
+              
+l3(String,Numeral) :-
+    numeral(Numeral),
+    length_helper(String, Numeral),
+    phrase(q0, String). % q0(String, [])

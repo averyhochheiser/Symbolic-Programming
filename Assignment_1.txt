@@ -1,0 +1,67 @@
+% Cancellation
+comp(s(p(X)), Y) :- comp(X, Y).  
+comp(p(s(X)), Y) :- comp(X, Y). 
+
+% Simple numerals
+comp(0, 0).
+comp(s(X), s(Y)) :- comp(X, Y).
+comp(p(X), p(Y)) :- comp(X, Y).
+
+% Case X + Y 
+comp(A+B, Sum) :-
+    comp(A, AVal),
+    comp(B, BVal),
+    add(AVal, BVal, Sum).
+
+% Case -X
+comp(-(X), Z) :-
+    comp(X, XOpp),
+    opp(XOpp, Z).
+
+% Case X - Y
+comp(X-Y, Z) :-
+    comp(X + ((-Y)), Z).
+
+% Add for all numerals
+add(0, X, X).
+add(s(X), p(Y), Z) :- add(X, Y, Z).
+add(p(X), s(Y), Z) :- add(X, Y, Z).
+add(s(X), Y, s(Z)) :- add(X, Y, Z).
+add(p(X), Y, p(Z)) :- add(X, Y, Z).
+
+% Negation
+opp(0, 0).
+opp(s(X), p(Z)) :- opp(X, Z).
+opp(p(X), s(Z)) :- opp(X, Z).
+
+%%% EXERCISE 1 %%%
+add2(X, Y, Z) :-
+    comp(X, XVal),
+    comp(Y, YVal),
+    add(XVal, YVal, Z).
+
+%%% EXERCISE 2 %%%
+add3(X, Y, Z) :-
+    comp(X, XVal),
+    comp(Y, YVal),
+    add(XVal, YVal, Z), !.
+
+%%% EXERCISE 3 %%% 
+minus(X, Y) :-
+    comp(X, XVal),   
+    opp(XVal, Y), !.
+
+%%% EXERCISE 4 %%%
+add4(X, Y, Z) :-
+    comp(X+Y, Z), !.
+
+%%% EXERCISE 5 %%%
+subtract(X, Y, Z) :-
+    comp(X + (-(Y)), Z), !.
+
+%%% EXERCISE 6 %%%
+add5(X, Y, Z) :-
+    comp(X + Y, Z), !.
+
+subtract2(X, Y, Z) :-
+    comp(X - Y, Z), !.
